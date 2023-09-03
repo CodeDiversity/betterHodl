@@ -8,7 +8,7 @@ type CoinPrice = {
 
 export const useCoin = () => {
   const [coins, setCoins] = useState<Coin[] | null>([]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Error | null>(null);
   const fetchCoins = async () => {
     return await fetch(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=false&locale=en'

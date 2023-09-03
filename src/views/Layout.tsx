@@ -4,8 +4,9 @@ import Coin from '../components/Coin';
 
 export default function Layout() {
   const { coins, error } = useCoin();
-  
-  if (error) return <div>Error: {error}</div>;
+  console.log(error)
+
+  if (error) return <div>Error: {error.message}</div>;
   if (!coins?.length) return <div>Loading...</div>;
   return (
     <div>
@@ -20,9 +21,11 @@ export default function Layout() {
             <th>Symbol</th>
           </tr>
         </thead>
+        <tbody>≈
         {coins?.map((coin) => (
           <Coin key={coin.id} coin={coin} />
         ))}
+        </tbody>
       </table>
     </div>
   );
