@@ -3,8 +3,10 @@ import { useCoin } from '../hooks/useCoin';
 import Coin from '../components/Coin';
 
 export default function Layout() {
-  const { coins } = useCoin();
-  console.log(coins);
+  const { coins, error } = useCoin();
+  
+  if (error) return <div>Error: {error}</div>;
+  if (!coins?.length) return <div>Loading...</div>;
   return (
     <div>
       <h1>Top 25 Coins</h1>

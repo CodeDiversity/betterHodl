@@ -8,6 +8,7 @@ type CoinPrice = {
 
 export const useCoin = () => {
   const [coins, setCoins] = useState<Coin[] | null>([]);
+  const [error, setError] = useState<string | null>(null);
   const fetchCoins = async () => {
     return await fetch(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=false&locale=en'
@@ -36,14 +37,17 @@ export const useCoin = () => {
 
   useEffect(() => {
     fetchCoins()
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => setCoins(data))
-      .catch((error) => console.log(error));
+      .catch((error) => setError(error));
   }, []);
 
   useEffect(() => {
     const subscription = webSocketObservables.subscribe((data) => {
       if (data && typeof data === 'string') {
+        console.log(data);
         const livePrice: CoinPrice = JSON.parse(data);
         coins?.forEach((c) => {
           if (c.id === Object.keys(livePrice)[0]) {
@@ -56,10 +60,10 @@ export const useCoin = () => {
     return () => {
       subscription.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
     coins,
+    error
   };
 };
