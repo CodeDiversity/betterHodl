@@ -1,0 +1,7 @@
+.coin {
+  display: flex; 
+  flex-direction: row;
+  gap: 1rem;
+}
+
+body { font-family: system-ui, sans-serif; }
