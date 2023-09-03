@@ -50,12 +50,12 @@ export default function Coin({ coin }: CoinProps) {
   return (
     <tr>
       <td>{coin.name}</td>
+      <td>{coin.symbol}</td>
       <td className={`${flash ? flashColor : ''}`}>
         {formatCurrency(coin.current_price)}
       </td>
       <td>{formatCurrency(coin.market_cap, true)}</td>
       <td>{coin?.total_volume?.toLocaleString()}</td>
-      <td>{coin.symbol}</td>
     </tr>
   );
 }

@@ -25,35 +25,32 @@ table {
   margin: 20px 0;
   font-family: Arial, sans-serif;
   text-align: left;
+  background-color: #2a2a2a; /* Dark background */
+  color: #ffffff; /* Light text */
 }
 
 /* Table Headers */
 th {
-  background-color: #f2f2f2;
-  color: #333;
+  background-color: #4a4a4a; /* Even darker background for headers */
+  color: #ffffff; /* White text */
   padding: 10px;
   font-weight: bold;
-  border: 1px solid #ccc;
+  border: 1px solid #666; /* Dark gray border */
 }
 
 /* Table Data */
 td {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #666; /* Dark gray border */
 }
 
 /* Zebra Striping for Rows */
 tr:nth-child(even) {
-  background-color: #f8f8f8;
+  background-color: #333333; /* Very dark gray background */
 }
 
 /* Hover Effect */
 tr:hover {
-  background-color: #f2f2f2;
+  background-color: #555555; /* Dark gray for hover */
   cursor: pointer;
-}
-
-/* Add some space between rows */
-tr {
-  margin-bottom: 15px;
 }
