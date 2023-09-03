@@ -8,16 +8,17 @@ interface CoinProps {
 
 export default function Coin({ coin }: CoinProps) {
   const [flash, setFlash] = useState(false);
+  const [flashColor, setFlashColor] = useState('');
   const prevValueRef = useRef<number | undefined | null>(coin.current_price);
 
-  // Store the previous value
   useEffect(() => {
-    prevValueRef.current = coin.current_price;
-  }, [coin.current_price]);
-
-  // Check if the value has changed
-  useEffect(() => {
+    console.log(prevValueRef.current, coin.current_price);
     if (prevValueRef.current !== coin.current_price) {
+      if (prevValueRef.current && prevValueRef.current < coin.current_price) {
+        setFlashColor('flash-green');
+      } else {
+        setFlashColor('flash-red');
+      }
       setFlash(true);
       const timer = setTimeout(() => {
         setFlash(false);
@@ -31,9 +32,7 @@ export default function Coin({ coin }: CoinProps) {
   return (
     <tr>
       <td>{coin.name}</td>
-      <td className={`${flash ? 'flash-green' : ''}`}>
-        {coin.current_price}
-      </td>
+      <td className={`${flash ? flashColor : ''}`}>{coin.current_price}</td>
       <td>{coin.market_cap}</td>
       <td>{coin.total_volume}</td>
       <td>{coin.symbol}</td>

@@ -1,12 +1,19 @@
 .coin {
-  display: flex; 
+  display: flex;
   flex-direction: row;
   gap: 1rem;
 }
 
-body { font-family: system-ui, sans-serif; }
+body {
+  font-family: system-ui, sans-serif;
+}
 
 .flash-green {
   background-color: green;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.flash-red {
+  background-color: red;
   transition: background-color 0.3s ease-in-out;
 }
