@@ -4,7 +4,6 @@ import './Layout.css';
 
 export default function Layout() {
   const { coins, error } = useCoin();
-  console.log(error);
 
   return (
     <div className='container'>

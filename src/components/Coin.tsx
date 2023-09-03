@@ -30,7 +30,6 @@ export default function Coin({ coin }: CoinProps) {
   };
 
   useEffect(() => {
-    console.log(prevValueRef.current, coin.current_price);
     if (prevValueRef.current !== coin.current_price) {
       if (prevValueRef.current && prevValueRef.current < coin.current_price) {
         setFlashColor('flash-green');
