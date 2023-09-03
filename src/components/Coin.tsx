@@ -11,6 +11,24 @@ export default function Coin({ coin }: CoinProps) {
   const [flashColor, setFlashColor] = useState('');
   const prevValueRef = useRef<number | undefined | null>(coin.current_price);
 
+  const formatCurrency = (value: number, wholeNumber?: boolean) => {
+    if (wholeNumber) {
+      return value.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      });
+    } else {
+      return value.toLocaleString('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 8,
+      });
+    }
+  };
+
   useEffect(() => {
     console.log(prevValueRef.current, coin.current_price);
     if (prevValueRef.current !== coin.current_price) {
@@ -32,9 +50,11 @@ export default function Coin({ coin }: CoinProps) {
   return (
     <tr>
       <td>{coin.name}</td>
-      <td className={`${flash ? flashColor : ''}`}>{coin.current_price}</td>
-      <td>{coin.market_cap}</td>
-      <td>{coin.total_volume}</td>
+      <td className={`${flash ? flashColor : ''}`}>
+        {formatCurrency(coin.current_price)}
+      </td>
+      <td>{formatCurrency(coin.market_cap, true)}</td>
+      <td>{coin?.total_volume?.toLocaleString()}</td>
       <td>{coin.symbol}</td>
     </tr>
   );
