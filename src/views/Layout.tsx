@@ -23,6 +23,7 @@ export default function Layout() {
               <th>Price</th>
               <th>Market Cap</th>
               <th>Volume</th>
+              <th>Last Updated</th>
             </tr>
           </thead>
           <tbody>
