@@ -17,7 +17,7 @@ export const useCoin = () => {
   };
 
   const fetchIds = async () => {
-    return await fetch('https:api.coincap.io/v2/assets?limit=1000');
+    return await fetch('https://api.coincap.io/v2/assets?limit=1000');
   };
 
   useEffect(() => {
