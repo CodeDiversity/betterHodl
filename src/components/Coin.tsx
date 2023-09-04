@@ -26,11 +26,13 @@ export default function Coin({ coin }: CoinProps) {
         maximumFractionDigits: 0,
       });
     } else {
+      // check how many decimal places the value has
+      const decimalPlaces = value.toString().split('.')[1]?.length;
       return value.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 8,
+        minimumFractionDigits: decimalPlaces,
+        maximumFractionDigits: 10,
       });
     }
   };

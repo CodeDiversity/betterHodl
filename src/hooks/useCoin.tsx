@@ -9,31 +9,16 @@ type CoinPrice = {
 export const useCoin = () => {
   const [coins, setCoins] = useState<Coin[] | null>([]);
   const [error, setError] = useState<Error | null>(null);
+  const [coinIds, setCoinIds] = useState<string[]>([]); // ['bitcoin', 'ethereum'
   const fetchCoins = async () => {
     return await fetch(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=25&page=1&sparkline=false&locale=en'
     );
   };
 
-  const webSocketObservables = new Observable((observer) => {
-    const ws = new WebSocket(
-      `wss://ws.coincap.io/prices?assets=${coins
-        ?.map((coin) => coin.id)
-        .join(',')}}`
-    );
-    ws.onmessage = (event) => {
-      observer.next(event.data);
-    };
-    ws.onerror = (error) => {
-      observer.error(error);
-    };
-    ws.onclose = () => {
-      observer.complete();
-    };
-    return () => {
-      ws.close();
-    };
-  });
+  const fetchIds = async () => {
+    return await fetch('https:api.coincap.io/v2/assets?limit=1000');
+  };
 
   useEffect(() => {
     fetchCoins()
@@ -42,9 +27,51 @@ export const useCoin = () => {
       })
       .then((data) => setCoins(data))
       .catch((error) => setError(error));
+
+    // fetchIds and then setCoinIds
+    fetchIds()
+      .then((response) => {
+        return response.json();
+      })
+      .then((res) => {
+        const ids = res.data.map((coin: Coin) => coin.id);
+        setCoinIds(ids);
+      })
+      .catch((error) => setError(error));
+
+    if (coins) {
+      coins.forEach((coin) => {
+        coinIds.forEach((coinId) => {
+          if (coinId.includes(coin.id)) {
+            console.log(coinId, coin.id);
+            coin.id = coinId;
+          }
+        });
+      });
+      setCoins([...coins]);
+    }
   }, []);
 
   useEffect(() => {
+    const webSocketObservables = new Observable((observer) => {
+      const ws = new WebSocket(
+        `wss://ws.coincap.io/prices?assets=${coins
+          ?.map((coin) => coin.id)
+          .join(',')}}`
+      );
+      ws.onmessage = (event) => {
+        observer.next(event.data);
+      };
+      ws.onerror = (error) => {
+        observer.error(error);
+      };
+      ws.onclose = () => {
+        observer.complete();
+      };
+      return () => {
+        ws.close();
+      };
+    });
     const subscription = webSocketObservables.subscribe((data) => {
       if (data && typeof data === 'string') {
         const livePrice: CoinPrice = JSON.parse(data);
@@ -59,7 +86,7 @@ export const useCoin = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [webSocketObservables]);
+  }, [coins]);
 
   return {
     coins,
