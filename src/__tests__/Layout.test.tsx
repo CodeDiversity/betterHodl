@@ -13,12 +13,16 @@ jest.mock('../hooks/useCoin', () => ({
         id: 'bitcoin',
         symbol: 'btc',
         name: 'Bitcoin',
-        image:
-          'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579',
-        current_price: 50000,
-        market_cap: 1000000000000,
-        total_volume: 100000000000,
-      },
+        explorer: 'https://explorer.bitcoin.com/btc',  // Placeholder, replace with the actual URL
+        changePercent24Hr: '0.00',  // Placeholder, replace with the actual data
+        marketCapUsd: '50000',  // Placeholder, replace with the actual data
+        maxSupply: null,  // Placeholder, replace with the actual data
+        priceUsd: '50000',  // Placeholder, replace with the actual data
+        rank: '1',  // Placeholder, replace with the actual data
+        supply: '0',  // Placeholder, replace with the actual data
+        volumeUsd24Hr: '0.00',  // Placeholder, replace with the actual data
+        vwap24Hr: '0.00',  // Placeholder, replace with the actual data
+      }
     ],
     error: null,
   }),

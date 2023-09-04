@@ -13,28 +13,34 @@ export default function Coin({ coin }: CoinProps) {
     minutesAndSecondsSinceLastUpdate,
     setMinutesAndSecondsSinceLastUpdate,
   ] = useState(0);
-  const prevValueRef = useRef<number | undefined | null>(coin.current_price);
+  const prevValueRef = useRef<string | undefined | null>(coin.priceUsd);
   // create a ref based upon a timestamp of when the coin is mounted;
   const lastUpdated = useRef(new Date());
 
-  const formatCurrency = (value: number, wholeNumber?: boolean) => {
+  const formatCurrency = (value: string | number, wholeNumber?: boolean) => {
+    // if whole number is true then return the value as a whole number
     if (wholeNumber) {
-      return value.toLocaleString('en-US', {
+      return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      });
-    } else {
-      // check how many decimal places the value has
-      const decimalPlaces = value.toString().split('.')[1]?.length;
-      return value.toLocaleString('en-US', {
+      }).format(Number(value));
+    }
+    // if whole number is false and value is over a dollar return the value with 2 decimal places
+    if (Number(value) > 1) {
+      return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: decimalPlaces,
-        maximumFractionDigits: 10,
-      });
+        minimumFractionDigits: 2,
+      }).format(Number(value));
     }
+    // if whole number is false and value is less than a dollar return the value with 4 decimal places
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 8,
+    }).format(Number(value));
   };
 
   const formatMinutesAndSeconds = (seconds: number) => {
@@ -52,8 +58,8 @@ export default function Coin({ coin }: CoinProps) {
   };
 
   useEffect(() => {
-    if (prevValueRef.current !== coin.current_price) {
-      if (prevValueRef.current && prevValueRef.current < coin.current_price) {
+    if (prevValueRef.current !== coin.priceUsd) {
+      if (prevValueRef.current && prevValueRef.current < coin.priceUsd) {
         setFlashColor('flash-green');
       } else {
         setFlashColor('flash-red');
@@ -68,13 +74,13 @@ export default function Coin({ coin }: CoinProps) {
         )
       );
       lastUpdated.current = new Date();
-      prevValueRef.current = coin.current_price;
+      prevValueRef.current = coin.priceUsd;
       setMinutesAndSecondsSinceLastUpdate(0);
 
       // Clean up timer if component is unmounted
       return () => clearTimeout(timer);
     }
-  }, [coin.current_price]);
+  }, [coin.priceUsd]);
   // create useEffect to update the minutesAndSecondsSinceLastUpdate state every 15 seconds
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -92,10 +98,10 @@ export default function Coin({ coin }: CoinProps) {
       <td>{coin.name}</td>
       <td>{coin.symbol}</td>
       <td className={`${flash ? flashColor : ''}`}>
-        {formatCurrency(coin.current_price)}
+        {formatCurrency(coin.priceUsd)}
       </td>
-      <td>{formatCurrency(coin.market_cap, true)}</td>
-      <td>{coin?.total_volume?.toLocaleString()}</td>
+      <td>{formatCurrency(coin.marketCapUsd, true)}</td>
+      <td>{formatCurrency(coin?.volumeUsd24Hr, true)}</td>
       <td>{formatMinutesAndSeconds(minutesAndSecondsSinceLastUpdate)}</td>
     </tr>
   );
