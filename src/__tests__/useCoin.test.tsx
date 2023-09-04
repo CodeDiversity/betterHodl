@@ -33,7 +33,7 @@ describe('useCoin', () => {
   it('should fetch coins and coin ids on mount', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useCoin());
 
-    expect(result.current.coins).toEqual([]);
+    expect(result.current.coins).toEqual(null);
     expect(result.current.error).toEqual(null);
 
     await waitForNextUpdate();
@@ -50,12 +50,12 @@ describe('useCoin', () => {
 
     const { result, waitForNextUpdate } = renderHook(() => useCoin());
 
-    expect(result.current.coins).toEqual([]);
+    expect(result.current.coins).toEqual(null);
     expect(result.current.error).toEqual(null);
 
     await waitForNextUpdate();
 
-    expect(result.current.coins).toEqual([]);
+    expect(result.current.coins).toEqual(null);
     expect(result.current.error).toEqual(new Error('Network error'));
   });
 });
